@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import PRODUCTS from './Components/Products/Products';
-import Product from './Components/Products/Product';
+import PizzasList from './Components/Pizza/PizzaList';
+import CalculateTotalPrice from './Components/Calculator/CalculateTotal';
 import './App.css';
 
 type Order = {
@@ -23,15 +24,7 @@ function App() {
         setOrders([...orders, { name: currentId[0].name, amount: 1 }]);
       }
     }
-  };
-
-  const PizzaShow = () => {
-    return PRODUCTS.map((product, index) => {
-      return (
-        <Product key={index} name={product.name} image={product.image} price={product.price} description={product.description} onCardClick={() => onCardClick(product.name)} />
-      );
-    });
-  };
+  }
 
   const deletePizza = (name: string) => {
     setOrders ((prev) =>
@@ -43,12 +36,16 @@ function App() {
 
   const ShowOrder = useMemo(() => {
     if(orders.length > 0) {
-      return orders.map((order) => (
-        <div key={order.name}>
-          Пицца: {order.name} x {order.amount}
-          <button onClick={() => deletePizza(order.name)}>delete</button>
-        </div>
-      ));
+      return orders.map((order) => {
+        if(order.amount !== 0){
+          return (
+          <div key={order.name}>
+            Пицца: {order.name} x {order.amount}
+            <button onClick={() => deletePizza(order.name)}>delete</button>
+          </div>
+          );
+        }
+      });
     }
     return 'Nothing';
   }, [orders]);
@@ -56,11 +53,14 @@ function App() {
   return (
     <div className='container d-flex justify-content-between'>
       <div className='order-details flex-grow-1'>
-        Order Details: 
+        <div className='d-flex justify-content-between'>
+          <p>Order Details:</p>
+          <p>Total: {CalculateTotalPrice(orders)} сом</p>
+        </div> 
         {ShowOrder}
       </div>
       <div className='add-pizza flex-grow-1'>
-        {PizzaShow()}
+        <PizzasList products={PRODUCTS} onCardClick={onCardClick}/>
       </div>
     </div>
   )
