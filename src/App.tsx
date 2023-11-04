@@ -15,9 +15,9 @@ function App() {
   };
 
   return (
-    <>
+    <div className='container d-flex flex-wrap justify-content-evenly'>
     {PizzaShow()}
-    </>
+    </div>
   )
 }
 

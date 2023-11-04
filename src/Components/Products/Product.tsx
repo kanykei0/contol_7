@@ -9,9 +9,9 @@ interface ProductItem {
 
 const Product: React.FC<ProductItem> = ({name, image, price, description}) => {
     return(
-        <div>
+        <div className="pizza">
             <div>
-                <img src={image} alt={name} />
+                <img className="pizza-img" src={image} alt={name} />
             </div>
             <div>
                 <p>{name}</p>
