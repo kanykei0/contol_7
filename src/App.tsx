@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react';
 import PRODUCTS from './Components/Products/Products';
 import Product from './Components/Products/Product';
-import './App.css'
+import './App.css';
 
 type Order = {
   name: string;
+  amount: number;
 }
 
 function App() {
@@ -12,7 +13,16 @@ function App() {
 
   const onCardClick = (name: string) => {
     const currentId = PRODUCTS.filter((product) => product.name === name);
-    setOrders((prevState) => [...prevState, {name: currentId[0].name}]);
+
+    if(currentId) {
+      const existOrder = orders.find((order) => order.name === currentId[0].name);
+      if(existOrder) {
+        existOrder.amount += 1;
+        setOrders([...orders]);
+      } else {
+        setOrders([...orders, { name: currentId[0].name, amount: 1 }]);
+      }
+    }
   };
 
   const PizzaShow = () => {
@@ -23,22 +33,31 @@ function App() {
     });
   };
 
-  const ShowOrder = () => {
-    if(orders.length > 0){
-      return orders.map((order, index) => {
-        return (
-          <div key={index}>{order.name}</div>
-        );
-      });
-    }
-    return ('Nothing');
+  const deletePizza = (name: string) => {
+    setOrders ((prev) =>
+      prev.map((item) =>
+        item.name === name ? { ...item, amount: Math.max(0, item.amount - 1) } : item
+      )
+    )
   };
+
+  const ShowOrder = useMemo(() => {
+    if(orders.length > 0) {
+      return orders.map((order) => (
+        <div key={order.name}>
+          Пицца: {order.name} x {order.amount}
+          <button onClick={() => deletePizza(order.name)}>delete</button>
+        </div>
+      ));
+    }
+    return 'Nothing';
+  }, [orders]);
 
   return (
     <div className='container d-flex justify-content-between'>
       <div className='order-details flex-grow-1'>
         Order Details: 
-        {ShowOrder()}
+        {ShowOrder}
       </div>
       <div className='add-pizza flex-grow-1'>
         {PizzaShow()}
