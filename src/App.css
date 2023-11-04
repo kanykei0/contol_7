@@ -1,3 +1,13 @@
+.add-pizza{
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 30px;
+}
+
+.order-details{
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 30px;
+}
+
 .pizza{
   max-width: 300px;
 }

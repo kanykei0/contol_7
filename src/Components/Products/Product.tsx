@@ -5,11 +5,12 @@ interface ProductItem {
     image: string;
     price: number;
     description: string;
+    onCardClick: React.MouseEventHandler;
 }
 
-const Product: React.FC<ProductItem> = ({name, image, price, description}) => {
+const Product: React.FC<ProductItem> = ({name, image, price, description, onCardClick}) => {
     return(
-        <div className="pizza">
+        <div onClick={onCardClick} className="pizza">
             <div>
                 <img className="pizza-img" src={image} alt={name} />
             </div>
